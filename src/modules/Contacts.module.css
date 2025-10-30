@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+  box-shadow: 2px 2px 33px 0px var(--card-shadow);
+  border-radius: 20px;
+  background-color: var(--background-second);
+}
+
+.container ul {
+  width: calc(100% - 100px);
+}

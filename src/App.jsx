@@ -1,7 +1,11 @@
+import Contacts from "./Components/Contacts";
+import Header from "./Components/Header";
+
 function App() {
   return (
     <>
-      <h1>Week 14</h1>
+      <Header />
+      <Contacts />
     </>
   );
 }

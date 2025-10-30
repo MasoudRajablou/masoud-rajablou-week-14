@@ -1,0 +1,38 @@
+.card {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: var(--card-background);
+  color: var(--text);
+  border-radius: 10px;
+  height: 80px;
+  margin: 15px;
+  padding: 20px;
+}
+
+.card li {
+  text-decoration: none;
+}
+
+.card p {
+  font-size: 1.3rem;
+  font-weight: 400;
+  flex-basis: 0;
+  flex-grow: 1;
+  line-height: 40px;
+}
+
+.card span {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.3rem;
+  text-align: center;
+  margin-right: 10px;
+}
+
+.card button {
+    background-color: var(--card-background);
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+}

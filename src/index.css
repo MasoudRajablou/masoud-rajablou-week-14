@@ -1,9 +1,17 @@
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
-  font-weight: 400;
+
+  --background: #0f3433;
+  --card-background: #004643;
+  --background-second: #001e1d;
+  --text: #e8e4e6;
+  --button: #f6bc60;
+  --button-text: #001e1d;
+  --card-shadow: #d2f8d2;
+  --delete: #e16162;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: var(--background);
 }
