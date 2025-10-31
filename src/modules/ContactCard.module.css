@@ -30,9 +30,30 @@
   margin-right: 10px;
 }
 
-.card button {
-    background-color: var(--card-background);
-    border: none;
-    font-size: 1.3rem;
-    cursor: pointer;
+.option {
+  position: relative;
+}
+
+.option button {
+  background-color: var(--card-background);
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: all 1s ease-in-out;
+}
+
+.option select {
+  position: absolute;
+  top: 0;
+  left: -50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  color: var(--background);
+  background-color: var(--card-shadow);
+  border-radius: 8px;
+  box-shadow: 1px 1px 29px var(--card-background);
+}
+
+.option option {
+  cursor: pointer;
 }

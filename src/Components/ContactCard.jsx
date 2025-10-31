@@ -1,17 +1,23 @@
-import { MdOutlineMailOutline, MdOutlinePhoneAndroid } from "react-icons/md";
+import {
+  MdOutlineDeleteForever,
+  MdOutlineEdit,
+  MdOutlineMailOutline,
+  MdOutlinePhoneAndroid,
+} from "react-icons/md";
 
 import styles from "../modules/ContactCard.module.css";
 import { VscThreeBars } from "react-icons/vsc";
+import { useState } from "react";
 
 function ContactCard({
   contact: { id, firstName, lastName, email, phone },
   optionHandler,
+  isOpenId,
+  editHandler,
+  deleteHandler,
 }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [opened, setOpened] = useState(false);
 
-  const optionHandler = () => {
-    setIsOpen(isOpen => !isOpen);
-  };
   return (
     <li key={id} className={styles.card}>
       <p>{`${firstName} ${lastName}`}</p>
@@ -27,17 +33,29 @@ function ContactCard({
         </span>
         {email}
       </p>
-      <button onMouseEnter={optionHandler} onMouseLeave={optionHandler}>
-        <VscThreeBars />
-        {isOpen && (
-          <ul>
-            <li>
-              <button>Edit</button>
-              <button>Delete</button>
-            </li>
-          </ul>
+      <div
+        className={styles.option}
+        onPointerOver={() => {
+          optionHandler(id);
+          setOpened(true);
+        }}
+        onPointerLeave={() => {
+          optionHandler(null);
+          setOpened(false);
+        }}
+      >
+        <button>{!opened && <VscThreeBars />}</button>
+        {isOpenId === id && (
+          <>
+            <button onClick={() => editHandler(id)}>
+              <MdOutlineEdit />
+            </button>
+            <button onClick={() => deleteHandler(id)}>
+              <MdOutlineDeleteForever />
+            </button>
+          </>
         )}
-      </button>
+      </div>
     </li>
   );
 }
