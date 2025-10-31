@@ -2,18 +2,18 @@ import { useEffect, useState } from "react";
 import styles from "../modules/Modal.module.css";
 import { MdOutlineCancelPresentation, MdSave } from "react-icons/md";
 
-function Modal({ contact, setIsModalId, saveHandler }) {
-  const [firstName, setFirstName] = useState(contact.firstName);
-  const [lastName, setLastName] = useState(contact.lastName);
-  const [phone, setPhone] = useState(contact.phone);
-  const [email, setEmail] = useState(contact.email);
+function Modal({ contacts, contact, setIsModalId, saveHandler, alert }) {
+  const [firstName, setFirstName] = useState(contact.firstName || "");
+  const [lastName, setLastName] = useState(contact.lastName || "");
+  const [phone, setPhone] = useState(contact.phone || "");
+  const [email, setEmail] = useState(contact.email || "");
 
-  const id = contact.id;
+  const id = contact.id || contacts.length + 1;
 
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
-        <h2>Contact Updating</h2>
+        <h2>{contact ? "Update Contact" : "Add Contact"} </h2>
         <div>
           <p>First Name</p>
           <input
@@ -46,17 +46,28 @@ function Modal({ contact, setIsModalId, saveHandler }) {
             onChange={e => setEmail(e.target.value)}
           />
         </div>
+        <div className={styles.alert}>
+          {alert && (
+            <>
+              <p>{alert}</p>
+              <div className={styles.progressBar}></div>
+            </>
+          )}
+        </div>
         <div className={styles.buttons}>
           <button
             className={styles.save}
             onClick={() => {
               saveHandler(id, firstName, lastName, phone, email);
-              setIsModalId(null);
+              
             }}
           >
             <MdSave />
           </button>
-          <button className={styles.close} onClick={() => setIsModalId(null)}>
+          <button
+            className={styles.close}
+            onClick={() => setIsModalId(modal => (modal ? false : null))}
+          >
             <MdOutlineCancelPresentation />
           </button>
         </div>

@@ -25,9 +25,14 @@ p {
 .overlay input {
   text-align: center;
   border: none;
-  height: 30px;
+  height: 40px;
   border-radius: 10px;
   width: 100%;
+}
+
+.overlay input:focus {
+  outline: none;
+  box-shadow: var(--button) -1px -1px 6px 1px inset;
 }
 
 .modal {
@@ -38,6 +43,39 @@ p {
   max-width: 500px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   position: relative;
+}
+
+.alert {
+  justify-self: center;
+  justify-content: center;
+  height: 40px;
+}
+
+.alert p {
+  width: 100%;
+  background-color: var(--text);
+  color: var(--delete);
+  border-radius: 10px;
+  font-size: 1rem;
+  text-align: center;
+  padding: 10px;
+}
+
+.progressBar {
+  margin: 10px;
+  height: 4px;
+  background: var(--delete);
+  border-radius: 2px;
+  animation: bar 1.5s ease-in;
+}
+
+@keyframes bar {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
 }
 
 .buttons {
