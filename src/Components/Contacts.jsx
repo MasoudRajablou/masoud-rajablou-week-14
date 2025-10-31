@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import { ThreeDot } from "react-loading-indicators";
 
+import Header from "./Header";
 import ContactList from "./ContactList";
 import Modal from "./Modal";
 
@@ -55,27 +57,36 @@ function Contacts() {
   };
 
   return (
-    <div className={styles.container}>
-      <ul>
-        {contacts.map(contact => (
-          <ContactList
-            key={contact.id}
-            contact={contact}
-            optionHandler={optionHandler}
-            isOpenId={isOpenId}
-            editHandler={editHandler}
-            deleteHandler={deleteHandler}
-            isModalId={isModalId}
-          />
-        ))}
-      </ul>
+    <div>
+      <div>
+        <Header />
+      </div>
+      {!contacts.length ? (
+        <ThreeDot color="#f6bc60" size="large" />
+      ) : (
+        <div className={styles.container}>
+          <ul>
+            {contacts.map(contact => (
+              <ContactList
+                key={contact.id}
+                contact={contact}
+                optionHandler={optionHandler}
+                isOpenId={isOpenId}
+                editHandler={editHandler}
+                deleteHandler={deleteHandler}
+                isModalId={isModalId}
+              />
+            ))}
+          </ul>
 
-      {!!isModalId && (
-        <Modal
-          contact={contacts.find(contact => contact.id === isModalId)}
-          setIsModalId={setIsModalId}
-          saveHandler={saveHandler}
-        />
+          {!!isModalId && (
+            <Modal
+              contact={contacts.find(contact => contact.id === isModalId)}
+              setIsModalId={setIsModalId}
+              saveHandler={saveHandler}
+            />
+          )}
+        </div>
       )}
     </div>
   );
