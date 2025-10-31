@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
 import { ThreeDot } from "react-loading-indicators";
+import { MdOutlineDeleteForever } from "react-icons/md";
 
 import Header from "./Header";
 import ContactList from "./ContactList";
 import Modal from "./Modal";
+import Message from "./Message";
 
 import styles from "../modules/Contacts.module.css";
-import Message from "./Message";
 
 function Contacts() {
   const [contacts, setContacts] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [isOpenId, setIsOpenId] = useState(null);
   const [isModalId, setIsModalId] = useState(null);
   const [addContact, setAddContact] = useState(false);
   const [alert, setAlert] = useState("");
   const [msg, setMsg] = useState("");
+  const [selected, setSelected] = useState([]);
+  const [selectBox, setSelectBox] = useState(false);
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -23,7 +27,7 @@ function Contacts() {
         const json = await res.json();
         setContacts(json);
       } catch (error) {
-        console.err(error);
+        console.error(error);
       }
     };
 
@@ -41,6 +45,7 @@ function Contacts() {
   const deleteHandler = id => {
     const newContacts = contacts.filter(contact => contact.id !== id);
     setContacts(newContacts);
+    showMessage("Contact is deleted.");
   };
 
   const saveHandler = (id, firstName, lastName, phone, email) => {
@@ -88,8 +93,6 @@ function Contacts() {
     }
   };
 
-  const selectHandler = () => {};
-
   const addContactHandler = () => {
     setAddContact(true);
   };
@@ -100,6 +103,48 @@ function Contacts() {
     setTimeout(() => {
       setMsg("");
     }, 3000);
+  };
+
+  const selectBtnHandler = () => {
+    setSelectBox(selectBox => !selectBox);
+  };
+
+  const selectHandler = id => {
+    setSelected(selected =>
+      selected.includes(id)
+        ? selected.filter(select => select !== id)
+        : [...selected, id]
+    );
+  };
+
+  const selectAllHandler = () => {
+    setSelected(contacts.map(contact => contact.id));
+  };
+
+  const deleteSelectedHandler = () => {
+    const newContacts = contacts.filter(
+      contact => !selected.includes(contact.id)
+    );
+    setContacts(newContacts);
+    setSelected([]);
+    setLoading(true);
+    setSelectBox(false);
+
+    newContacts.length === 0
+      ? showMessage("All contacts are deleted")
+      : showMessage("Selected contacts are deleted");
+  };
+
+  const searchHandler = letter => {
+    const newContacts = contacts.filter(
+      contact =>
+        contact.firstName.includes(letter) ||
+        contact.lastName.includes(letter) ||
+        contact.phone.includes(letter) ||
+        contact.email.includes(letter)
+    );
+
+    setContacts(newContacts);
   };
 
   return (
@@ -113,10 +158,29 @@ function Contacts() {
           saveHandler={saveHandler}
           setAddContact={setAddContact}
           alert={alert}
+          selectBtnHandler={selectBtnHandler}
+          searchHandler={searchHandler}
         />
       </div>
+
+      {selectBox && (
+        <div className={styles.select}>
+          <label>
+            <input type="checkbox" onClick={selectAllHandler} />
+            <p>Select All</p>
+          </label>
+          <button onClick={deleteSelectedHandler}>
+            <MdOutlineDeleteForever />
+          </button>
+        </div>
+      )}
+
       {!contacts.length ? (
-        <ThreeDot color="#f6bc60" size="large" />
+        !loading ? (
+          <ThreeDot color="#f6bc60" size="large" />
+        ) : (
+          <h3>There is no contact to show!!</h3>
+        )
       ) : (
         <div className={styles.container}>
           <ul>
@@ -129,6 +193,9 @@ function Contacts() {
                 editHandler={editHandler}
                 deleteHandler={deleteHandler}
                 isModalId={isModalId}
+                selected={selected}
+                selectBox={selectBox}
+                selectHandler={selectHandler}
               />
             ))}
           </ul>

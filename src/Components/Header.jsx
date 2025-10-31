@@ -11,13 +11,19 @@ function Header({
   saveHandler,
   setAddContact,
   alert,
+  selectBtnHandler,
+  searchHandler,
 }) {
   return (
     <div className={styles.container}>
       <h1>Contact List</h1>
       <div className={styles.search}>
-        <input type="text" placeholder="Search name, number or mail" />
-        <button title="select contacts">
+        <input
+          type="text"
+          placeholder="Search name, number or mail"
+          onChange={e => searchHandler(e.target.value)}
+        />
+        <button title="select contacts" onClick={selectBtnHandler}>
           <MdSelectAll />
         </button>
         <button title="Add new contact" onClick={addContactHandler}>

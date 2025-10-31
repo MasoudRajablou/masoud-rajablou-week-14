@@ -6,6 +6,9 @@ function ContactList({
   isOpenId,
   editHandler,
   deleteHandler,
+  selected,
+  selectBox,
+  selectHandler,
 }) {
   return (
     <>
@@ -15,6 +18,9 @@ function ContactList({
         isOpenId={isOpenId}
         editHandler={editHandler}
         deleteHandler={deleteHandler}
+        selected={selected}
+        selectBox={selectBox}
+        selectHandler={selectHandler}
       />
     </>
   );

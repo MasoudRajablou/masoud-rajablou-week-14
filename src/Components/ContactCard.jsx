@@ -15,11 +15,15 @@ function ContactCard({
   isOpenId,
   editHandler,
   deleteHandler,
+  selected,
+  selectBox,
+  selectHandler,
 }) {
   const [opened, setOpened] = useState(false);
 
   return (
     <li key={id} className={styles.card}>
+      {selectBox && <input type="checkbox" onClick={() => selectHandler(id)} />}
       <p>{`${firstName} ${lastName}`}</p>
       <p>
         <span>
