@@ -2,13 +2,19 @@ import { useEffect, useState } from "react";
 import styles from "../modules/Modal.module.css";
 import { MdOutlineCancelPresentation, MdSave } from "react-icons/md";
 
-function Modal({ contacts, contact, setIsModalId, saveHandler, alert }) {
+function Modal({
+  originalContacts,
+  contact,
+  setIsModalId,
+  saveHandler,
+  alert,
+}) {
   const [firstName, setFirstName] = useState(contact.firstName || "");
   const [lastName, setLastName] = useState(contact.lastName || "");
   const [phone, setPhone] = useState(contact.phone || "");
   const [email, setEmail] = useState(contact.email || "");
 
-  const id = contact.id || contacts.length + 1;
+  const id = contact.id || originalContacts.length + 1;
 
   return (
     <div className={styles.overlay}>
@@ -59,7 +65,6 @@ function Modal({ contacts, contact, setIsModalId, saveHandler, alert }) {
             className={styles.save}
             onClick={() => {
               saveHandler(id, firstName, lastName, phone, email);
-              
             }}
           >
             <MdSave />

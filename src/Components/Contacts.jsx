@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ThreeDot } from "react-loading-indicators";
-import { MdOutlineDeleteForever } from "react-icons/md";
+import { MdOutlineCancel, MdOutlineDeleteForever } from "react-icons/md";
 
 import Header from "./Header";
 import ContactList from "./ContactList";
@@ -10,6 +10,7 @@ import Message from "./Message";
 import styles from "../modules/Contacts.module.css";
 
 function Contacts() {
+  const [originalContacts, setOriginalContacts] = useState([]);
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isOpenId, setIsOpenId] = useState(null);
@@ -19,12 +20,14 @@ function Contacts() {
   const [msg, setMsg] = useState("");
   const [selected, setSelected] = useState([]);
   const [selectBox, setSelectBox] = useState(false);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const fetchContacts = async () => {
       try {
         const res = await fetch("/MOCK_DATA.json");
         const json = await res.json();
+        setOriginalContacts(json);
         setContacts(json);
       } catch (error) {
         console.error(error);
@@ -33,6 +36,18 @@ function Contacts() {
 
     fetchContacts();
   }, []);
+
+  useEffect(() => {
+    const newContacts = originalContacts.filter(
+      contact =>
+        contact.firstName.includes(search) ||
+        contact.lastName.includes(search) ||
+        contact.phone.toString().includes(search) ||
+        contact.email.includes(search)
+    );
+
+    search ? setContacts(newContacts) : setContacts(originalContacts);
+  }, [search]);
 
   const optionHandler = id => {
     setIsOpenId(id);
@@ -43,8 +58,8 @@ function Contacts() {
   };
 
   const deleteHandler = id => {
-    const newContacts = contacts.filter(contact => contact.id !== id);
-    setContacts(newContacts);
+    const newContacts = originalContacts.filter(contact => contact.id !== id);
+    setOriginalContacts(newContacts);
     showMessage("Contact is deleted.");
   };
 
@@ -61,7 +76,7 @@ function Contacts() {
     setAlert("");
 
     if (!addContact) {
-      const updatedContact = contacts.map(contact => {
+      const updatedContact = originalContacts.map(contact => {
         if (contact.id === id) {
           return {
             id,
@@ -75,11 +90,11 @@ function Contacts() {
       });
 
       setIsModalId(null);
-      setContacts(updatedContact);
+      setOriginalContacts(updatedContact);
       showMessage("The contact is updated!");
     } else {
-      setContacts([
-        ...contacts,
+      setOriginalContacts([
+        ...originalContacts,
         {
           id: id,
           firstName: firstName,
@@ -107,6 +122,7 @@ function Contacts() {
 
   const selectBtnHandler = () => {
     setSelectBox(selectBox => !selectBox);
+    setSelected([]);
   };
 
   const selectHandler = id => {
@@ -118,14 +134,14 @@ function Contacts() {
   };
 
   const selectAllHandler = () => {
-    setSelected(contacts.map(contact => contact.id));
+    setSelected(originalContacts.map(contact => contact.id));
   };
 
   const deleteSelectedHandler = () => {
-    const newContacts = contacts.filter(
+    const newContacts = originalContacts.filter(
       contact => !selected.includes(contact.id)
     );
-    setContacts(newContacts);
+    setOriginalContacts(newContacts);
     setSelected([]);
     setLoading(true);
     setSelectBox(false);
@@ -135,47 +151,51 @@ function Contacts() {
       : showMessage("Selected contacts are deleted");
   };
 
-  const searchHandler = letter => {
-    const newContacts = contacts.filter(
-      contact =>
-        contact.firstName.includes(letter) ||
-        contact.lastName.includes(letter) ||
-        contact.phone.includes(letter) ||
-        contact.email.includes(letter)
-    );
-
-    setContacts(newContacts);
-  };
-
   return (
     <>
       <>{msg && <Message msg={msg} />}</>
       <div>
         <Header
-          contacts={contacts}
+          originalContacts={originalContacts}
           addContactHandler={addContactHandler}
           addContact={addContact}
           saveHandler={saveHandler}
           setAddContact={setAddContact}
           alert={alert}
           selectBtnHandler={selectBtnHandler}
-          searchHandler={searchHandler}
+          setSearch={setSearch}
         />
       </div>
 
       {selectBox && (
         <div className={styles.select}>
           <label>
-            <input type="checkbox" onClick={selectAllHandler} />
+            <input
+              type="checkbox"
+              checked={
+                selected.length && selected.length === originalContacts.length
+              }
+              disabled={!originalContacts.length}
+              onChange={selectAllHandler}
+            />
             <p>Select All</p>
           </label>
-          <button onClick={deleteSelectedHandler}>
+          <button title="Delete" onClick={deleteSelectedHandler}>
             <MdOutlineDeleteForever />
+          </button>
+          <button
+            title="Cancel"
+            onClick={() => {
+              setSelectBox(selectBox => !selectBox);
+              setSelected([]);
+            }}
+          >
+            <MdOutlineCancel />
           </button>
         </div>
       )}
 
-      {!contacts.length ? (
+      {!originalContacts.length ? (
         !loading ? (
           <ThreeDot color="#f6bc60" size="large" />
         ) : (
@@ -202,7 +222,7 @@ function Contacts() {
 
           {!!isModalId && (
             <Modal
-              contacts={contacts}
+              orginalContacts={originalContacts}
               contact={contacts.find(contact => contact.id === isModalId)}
               setIsModalId={setIsModalId}
               saveHandler={saveHandler}

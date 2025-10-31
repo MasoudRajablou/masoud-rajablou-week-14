@@ -23,7 +23,13 @@ function ContactCard({
 
   return (
     <li key={id} className={styles.card}>
-      {selectBox && <input type="checkbox" onClick={() => selectHandler(id)} />}
+      {selectBox && (
+        <input
+          type="checkbox"
+          checked={selected.includes(id)}
+          onChange={() => selectHandler(id)}
+        />
+      )}
       <p>{`${firstName} ${lastName}`}</p>
       <p>
         <span>

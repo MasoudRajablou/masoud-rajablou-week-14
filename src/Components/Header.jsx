@@ -5,14 +5,14 @@ import { MdOutlineAddBox, MdSelectAll } from "react-icons/md";
 import styles from "../modules/Header.module.css";
 
 function Header({
-  contacts,
+  originalContacts,
   addContactHandler,
   addContact,
   saveHandler,
   setAddContact,
   alert,
   selectBtnHandler,
-  searchHandler,
+  setSearch,
 }) {
   return (
     <div className={styles.container}>
@@ -21,7 +21,7 @@ function Header({
         <input
           type="text"
           placeholder="Search name, number or mail"
-          onChange={e => searchHandler(e.target.value)}
+          onChange={e => setSearch(e.target.value.toLowerCase().trim())}
         />
         <button title="select contacts" onClick={selectBtnHandler}>
           <MdSelectAll />
@@ -33,7 +33,7 @@ function Header({
 
       {addContact && (
         <Modal
-          contacts={contacts}
+          originalContacts={originalContacts}
           contact={""}
           setIsModalId={setAddContact}
           saveHandler={saveHandler}
