@@ -40,10 +40,10 @@ function Contacts() {
   useEffect(() => {
     const newContacts = originalContacts.filter(
       contact =>
-        contact.firstName.includes(search) ||
-        contact.lastName.includes(search) ||
+        contact.firstName.toLowerCase().trim().includes(search) ||
+        contact.lastName.toLowerCase().trim().includes(search) ||
         contact.phone.toString().includes(search) ||
-        contact.email.includes(search)
+        contact.email.toLowerCase().trim().includes(search)
     );
 
     search ? setContacts(newContacts) : setContacts(originalContacts);
@@ -59,7 +59,7 @@ function Contacts() {
 
   const deleteHandler = id => {
     const newContacts = originalContacts.filter(contact => contact.id !== id);
-    setOriginalContacts(newContacts);
+    setContacts(newContacts);
     showMessage("Contact is deleted.");
   };
 
@@ -90,10 +90,10 @@ function Contacts() {
       });
 
       setIsModalId(null);
-      setOriginalContacts(updatedContact);
+      setContacts(updatedContact);
       showMessage("The contact is updated!");
     } else {
-      setOriginalContacts([
+      setContacts([
         ...originalContacts,
         {
           id: id,
@@ -141,7 +141,7 @@ function Contacts() {
     const newContacts = originalContacts.filter(
       contact => !selected.includes(contact.id)
     );
-    setOriginalContacts(newContacts);
+    setContacts(newContacts);
     setSelected([]);
     setLoading(true);
     setSelectBox(false);
