@@ -58,7 +58,7 @@ function Contacts() {
   };
 
   const deleteHandler = id => {
-    const newContacts = originalContacts.filter(contact => contact.id !== id);
+    const newContacts = contacts.filter(contact => contact.id !== id);
     setContacts(newContacts);
     showMessage("Contact is deleted.");
   };
@@ -76,7 +76,7 @@ function Contacts() {
     setAlert("");
 
     if (!addContact) {
-      const updatedContact = originalContacts.map(contact => {
+      const updatedContact = contacts.map(contact => {
         if (contact.id === id) {
           return {
             id,
@@ -91,9 +91,20 @@ function Contacts() {
 
       setIsModalId(null);
       setContacts(updatedContact);
+      setOriginalContacts(updatedContact);
       showMessage("The contact is updated!");
     } else {
       setContacts([
+        ...originalContacts,
+        {
+          id: id,
+          firstName: firstName,
+          lastName: lastName,
+          phone: phone,
+          email: email,
+        },
+      ]);
+      setOriginalContacts([
         ...originalContacts,
         {
           id: id,
@@ -134,14 +145,17 @@ function Contacts() {
   };
 
   const selectAllHandler = () => {
-    setSelected(originalContacts.map(contact => contact.id));
+    !selected.length
+      ? setSelected(contacts.map(contact => contact.id))
+      : setSelected([]);
   };
 
   const deleteSelectedHandler = () => {
-    const newContacts = originalContacts.filter(
+    const newContacts = contacts.filter(
       contact => !selected.includes(contact.id)
     );
     setContacts(newContacts);
+    setOriginalContacts(newContacts);
     setSelected([]);
     setLoading(true);
     setSelectBox(false);
@@ -172,9 +186,7 @@ function Contacts() {
           <label>
             <input
               type="checkbox"
-              checked={
-                selected.length && selected.length === originalContacts.length
-              }
+              checked={selected.length && selected.length === contacts.length}
               disabled={!originalContacts.length}
               onChange={selectAllHandler}
             />
@@ -195,7 +207,7 @@ function Contacts() {
         </div>
       )}
 
-      {!originalContacts.length ? (
+      {!contacts.length ? (
         !loading ? (
           <ThreeDot color="#f6bc60" size="large" />
         ) : (
@@ -222,7 +234,7 @@ function Contacts() {
 
           {!!isModalId && (
             <Modal
-              orginalContacts={originalContacts}
+              originalContacts={originalContacts}
               contact={contacts.find(contact => contact.id === isModalId)}
               setIsModalId={setIsModalId}
               saveHandler={saveHandler}
