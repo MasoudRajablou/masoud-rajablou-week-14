@@ -5,7 +5,7 @@ import { MdOutlineCancelPresentation, MdSave } from "react-icons/md";
 function Modal({
   originalContacts,
   contact,
-  setIsModalId,
+  modalCancelHandler,
   saveHandler,
   alert,
 }) {
@@ -69,10 +69,7 @@ function Modal({
           >
             <MdSave />
           </button>
-          <button
-            className={styles.close}
-            onClick={() => setIsModalId(modal => (modal ? false : null))}
-          >
+          <button className={styles.close} onClick={modalCancelHandler}>
             <MdOutlineCancelPresentation />
           </button>
         </div>

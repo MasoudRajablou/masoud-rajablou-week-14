@@ -9,7 +9,7 @@ function Header({
   addContactHandler,
   addContact,
   saveHandler,
-  setAddContact,
+  modalCancelHandler,
   alert,
   selectBtnHandler,
   setSearch,
@@ -35,7 +35,7 @@ function Header({
         <Modal
           originalContacts={originalContacts}
           contact={""}
-          setIsModalId={setAddContact}
+          modalCancelHandler={modalCancelHandler}
           saveHandler={saveHandler}
           alert={alert}
         />

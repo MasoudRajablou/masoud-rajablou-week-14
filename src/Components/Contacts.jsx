@@ -14,7 +14,8 @@ function Contacts() {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isOpenId, setIsOpenId] = useState(null);
-  const [isModalId, setIsModalId] = useState(null);
+  const [modalId, setModalId] = useState(null);
+  const [isModal, setIsModal] = useState(false);
   const [addContact, setAddContact] = useState(false);
   const [alert, setAlert] = useState("");
   const [msg, setMsg] = useState("");
@@ -49,12 +50,17 @@ function Contacts() {
     search ? setContacts(newContacts) : setContacts(originalContacts);
   }, [search]);
 
+  useEffect(() => {
+    document.body.style.overflow = isModal ? "hidden" : "auto";
+  }, [modalId, addContact]);
+
   const optionHandler = id => {
     setIsOpenId(id);
   };
 
   const editHandler = id => {
-    setIsModalId(id);
+    setModalId(id);
+    setIsModal(true);
   };
 
   const deleteHandler = id => {
@@ -74,6 +80,7 @@ function Contacts() {
     }
 
     setAlert("");
+    setIsModal(false);
 
     if (!addContact) {
       const updatedContact = contacts.map(contact => {
@@ -89,7 +96,7 @@ function Contacts() {
         return contact;
       });
 
-      setIsModalId(null);
+      setModalId(null);
       setContacts(updatedContact);
       setOriginalContacts(updatedContact);
       showMessage("The contact is updated!");
@@ -121,6 +128,7 @@ function Contacts() {
 
   const addContactHandler = () => {
     setAddContact(true);
+    setIsModal(true);
   };
 
   const showMessage = message => {
@@ -165,6 +173,12 @@ function Contacts() {
       : showMessage("Selected contacts are deleted");
   };
 
+  const modalCancelHandler = () => {
+    setAddContact(false);
+    setModalId(null);
+    setIsModal(false);
+  };
+
   return (
     <>
       <>{msg && <Message msg={msg} />}</>
@@ -174,7 +188,7 @@ function Contacts() {
           addContactHandler={addContactHandler}
           addContact={addContact}
           saveHandler={saveHandler}
-          setAddContact={setAddContact}
+          modalCancelHandler={modalCancelHandler}
           alert={alert}
           selectBtnHandler={selectBtnHandler}
           setSearch={setSearch}
@@ -224,7 +238,7 @@ function Contacts() {
                 isOpenId={isOpenId}
                 editHandler={editHandler}
                 deleteHandler={deleteHandler}
-                isModalId={isModalId}
+                modalId={modalId}
                 selected={selected}
                 selectBox={selectBox}
                 selectHandler={selectHandler}
@@ -232,11 +246,11 @@ function Contacts() {
             ))}
           </ul>
 
-          {!!isModalId && (
+          {!!modalId && (
             <Modal
               originalContacts={originalContacts}
-              contact={contacts.find(contact => contact.id === isModalId)}
-              setIsModalId={setIsModalId}
+              contact={contacts.find(contact => contact.id === modalId)}
+              modalCancelHandler={modalCancelHandler}
               saveHandler={saveHandler}
               alert={alert}
             />
