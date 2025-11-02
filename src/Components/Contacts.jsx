@@ -192,6 +192,7 @@ function Contacts() {
           alert={alert}
           selectBtnHandler={selectBtnHandler}
           setSearch={setSearch}
+          isModal={isModal}
         />
       </div>
 
@@ -246,7 +247,7 @@ function Contacts() {
             ))}
           </ul>
 
-          {!!modalId && (
+          {isModal && (
             <Modal
               originalContacts={originalContacts}
               contact={contacts.find(contact => contact.id === modalId)}

@@ -13,6 +13,7 @@ function Header({
   alert,
   selectBtnHandler,
   setSearch,
+  isModal,
 }) {
   return (
     <div className={styles.container}>
@@ -31,10 +32,10 @@ function Header({
         </button>
       </div>
 
-      {addContact && (
+      {isModal && (
         <Modal
           originalContacts={originalContacts}
-          contact={""}
+          contact={null}
           modalCancelHandler={modalCancelHandler}
           saveHandler={saveHandler}
           alert={alert}

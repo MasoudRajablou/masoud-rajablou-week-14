@@ -9,12 +9,12 @@ function Modal({
   saveHandler,
   alert,
 }) {
-  const [firstName, setFirstName] = useState(contact.firstName || "");
-  const [lastName, setLastName] = useState(contact.lastName || "");
-  const [phone, setPhone] = useState(contact.phone || "");
-  const [email, setEmail] = useState(contact.email || "");
+  const [firstName, setFirstName] = useState(contact?.firstName || "");
+  const [lastName, setLastName] = useState(contact?.lastName || "");
+  const [phone, setPhone] = useState(contact?.phone || "");
+  const [email, setEmail] = useState(contact?.email || "");
 
-  const id = contact.id || originalContacts.length + 1;
+  const id = contact?.id || originalContacts.length + 1;
 
   return (
     <div className={styles.overlay}>
